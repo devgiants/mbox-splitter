@@ -21,6 +21,13 @@ else die('No output folder specified');
 if(!file_exists($mbox_output_folder))
     mkdir($mbox_output_folder);
 
+// Kill all files inside
+$files = glob("$mbox_output_folder/*");
+foreach($files as $file) {
+    if(is_file($file))
+        unlink($file);
+}
+
 $handle = fopen($mbox_input_file, "r") or die("Couldn't get handle");
 if ($handle) {
     $mail_counter = 1;
