@@ -1,10 +1,11 @@
 fn main() {}
 
 fn split(mails_content: &str) -> Vec<&str> {
-    let mut mails: Vec<&str> = Vec::new();
-    if mails_content.len() > 0 {
-        mails.push(mails_content);
+    if mails_content.len() == 0 {
+        return vec![];
     }
+    let mut mails: Vec<&str> = Vec::new();
+    mails.push(mails_content);
     mails
 }
 
