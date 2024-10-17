@@ -2,6 +2,10 @@ fn main() {
 
 }
 
+fn split(_mails_content: &str) -> Vec<&str> {
+    vec![]
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
