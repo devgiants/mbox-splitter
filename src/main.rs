@@ -28,5 +28,13 @@ mod tests {
         assert_eq!(mails.get(0).unwrap(), &mail_content);
         Ok(())
     }
+
+    #[test]
+    fn two_mails_test() -> io::Result<()> {
+        let mail_content = fs::read_to_string("tests/data/two_mails.mbox")?;
+        let mails: Vec<&str> = split(&mail_content);
+        assert_eq!(mails.len(), 2);
+        Ok(())
+    }
 }
 
