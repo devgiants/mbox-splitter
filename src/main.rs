@@ -1,11 +1,15 @@
 fn main() {}
 
+const MBOX_MAIL_SEPARATOR: &str = "\nFrom ";
+
 fn split(mails_content: &str) -> Vec<&str> {
     if mails_content.len() == 0 {
         return vec![];
     }
     let mut mails: Vec<&str> = Vec::new();
-    mails.push(mails_content);
+    mails_content.split(MBOX_MAIL_SEPARATOR).for_each(|mail| {
+        mails.push(mail);
+    });
     mails
 }
 
