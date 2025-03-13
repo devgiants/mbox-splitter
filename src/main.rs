@@ -2,8 +2,6 @@ use std::fmt::format;
 use std::fs;
 use std::io::Error;
 
-mod domain;
-
 fn main() {}
 
 const MBOX_MAIL_SEPARATOR: &str = "\nFrom ";
