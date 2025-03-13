@@ -1,3 +1,9 @@
+use std::fmt::format;
+use std::fs;
+use std::io::Error;
+
+mod domain;
+
 fn main() {}
 
 const MBOX_MAIL_SEPARATOR: &str = "\nFrom ";
@@ -23,6 +29,18 @@ fn split(mails_content: &str, chunk_size: usize) -> Vec<String> {
          mails.push(MBOX_MAIL_SEPARATOR.to_owned() + &*mails_chunked.clone());
      }
     mails
+}
+
+fn store(mails: Vec<String>) -> Result<Vec<String>, Error> {
+    let mut mbox_paths: Vec<String> = Vec::new();
+    mails
+        .iter()
+        .for_each(|mail| {
+            let current_path = format!("tests/store/{}.mbox", mbox_paths.len());
+            fs::write(current_path.clone(), mail).unwrap();
+            mbox_paths.push(current_path);
+        });
+    Ok(mbox_paths)
 }
 
 #[cfg(test)]
@@ -57,6 +75,23 @@ mod tests {
         let mail_content = fs::read_to_string("tests/data/100_mails.mbox")?;
         let mails: Vec<String> = split(&mail_content, 80000);
         assert_eq!(mails.len(), 2);
+        Ok(())
+    }
+
+    #[test]
+    fn store_mails_chunk() -> io::Result<()> {
+        reinit_storage_dir()?;
+        let mail_content = fs::read_to_string("tests/data/100_mails.mbox")?;
+        let mails: Vec<String> = split(&mail_content, 80000);
+        store(mails)?;
+        assert_eq!(fs::exists("tests/store/0.mbox")?, true);
+        assert_eq!(fs::exists("tests/store/1.mbox")?, true);
+        Ok(())
+    }
+
+    fn reinit_storage_dir() -> Result<(), Error> {
+        fs::remove_dir_all("tests/store")?;
+        fs::create_dir("tests/store")?;
         Ok(())
     }
 }
