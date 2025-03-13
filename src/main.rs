@@ -48,6 +48,7 @@ mod tests {
     use std::{fs, io};
     use super::*;
 
+    const TEST_STORAGE_DIR: &str = "tests/store";
     #[test]
     fn empty_content_test() {
         let mails: Vec<String> = split("", 0);
@@ -84,8 +85,9 @@ mod tests {
         let mail_content = fs::read_to_string("tests/data/100_mails.mbox")?;
         let mails: Vec<String> = split(&mail_content, 80000);
         store(mails)?;
-        assert_eq!(fs::exists("tests/store/0.mbox")?, true);
-        assert_eq!(fs::exists("tests/store/1.mbox")?, true);
+        for i in 0..=1 {
+            assert_eq!(fs::exists(format!("{}/{}.mbox", TEST_STORAGE_DIR, i))?, true);
+        }
         Ok(())
     }
 
