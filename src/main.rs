@@ -93,21 +93,21 @@ mod tests {
         Ok(())
     }
 
-    // #[test]
-    // fn store_mails_chunk() -> io::Result<()> {
-    //     reinit_storage_dir()?;
-    //     let file_path = "tests/data/100_mails.mbox";
-    //     let mut file_reader_ref = File::open(file_path)?;
-    //     let mails: Vec<String> = split_file(&mut file_reader_ref, 80000);
-    //     store(mails)?;
-    //     for i in 0..=1 {
-    //         assert_eq!(
-    //             fs::exists(format!("{}/{}.mbox", TEST_STORAGE_DIR, i))?,
-    //             true
-    //         );
-    //     }
-    //     Ok(())
-    // }
+    #[test]
+    fn store_mails_chunk() -> io::Result<()> {
+        reinit_storage_dir()?;
+        let file_path = "tests/data/100_mails.mbox";
+        let mut file_reader_ref = File::open(file_path)?;
+        let mails: Vec<String> = split_file(&mut file_reader_ref, 30000);
+        store(mails)?;
+        for i in 0..=3 {
+            assert_eq!(
+                fs::exists(format!("{}/{}.mbox", TEST_STORAGE_DIR, i))?,
+                true
+            );
+        }
+        Ok(())
+    }
 
     fn reinit_storage_dir() -> Result<(), Error> {
         fs::remove_dir_all("tests/store")?;
