@@ -8,8 +8,15 @@ fn main() {}
 const MBOX_MAIL_SEPARATOR: &str = "\nFrom ";
 
 fn split_file(file_reader_ref: &mut File, chunk_size: u64) -> Vec<String> {
-    let mails: Vec<String> = Vec::new();
-
+    let mut mails: Vec<String> = Vec::new();
+    let mut reader = BufReader::new(file_reader_ref);
+    let mut buffer = String::from("");
+    
+    let bytes_read = reader.take(chunk_size).read_to_string(&mut buffer).expect("Failed to read from file");
+    
+    if bytes_read > 0 && bytes_read < chunk_size as usize {
+        mails.push(buffer);
+    }
 
     mails
 }
