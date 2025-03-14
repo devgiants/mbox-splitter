@@ -1,4 +1,3 @@
-use std::fmt::format;
 use std::fs;
 use std::fs::File;
 use std::io::{BufReader, Error, Read, Seek, SeekFrom};
@@ -58,7 +57,7 @@ mod tests {
 
     const TEST_STORAGE_DIR: &str = "tests/store";
     #[test]
-    fn empty_content_test() -> io::Result<()> {
+    fn should_produce_no_mail() -> io::Result<()> {
         let file_path = "tests/data/empty.mbox";
         let mut file_reader_ref = File::open(file_path)?;
         let mails: Vec<String> = split_file(&mut file_reader_ref, 80000);
@@ -67,7 +66,7 @@ mod tests {
     }
 
     #[test]
-    fn one_mail_test() -> io::Result<()> {
+    fn should_produce_one_mail() -> io::Result<()> {
         let file_path = "tests/data/one_mail.mbox";
         let mut file_reader_ref = File::open(file_path)?;
         let mails: Vec<String> = split_file(&mut file_reader_ref, 100000);
@@ -76,7 +75,7 @@ mod tests {
     }
 
     #[test]
-    fn two_mails_test() -> io::Result<()> {
+    fn should_producte_two_mails() -> io::Result<()> {
         let file_path = "tests/data/two_mails.mbox";
         let mut file_reader_ref = File::open(file_path)?;
         let mails: Vec<String> = split_file(&mut file_reader_ref, 1200);
@@ -85,7 +84,7 @@ mod tests {
     }
 
     #[test]
-    fn split_by_size_test() -> io::Result<()> {
+    fn should_produce_four_mails() -> io::Result<()> {
         let file_path = "tests/data/100_mails.mbox";
         let mut file_reader_ref = File::open(file_path)?;
         let mails: Vec<String> = split_file(&mut file_reader_ref, 30000);
@@ -94,7 +93,7 @@ mod tests {
     }
 
     #[test]
-    fn store_mails_chunk() -> io::Result<()> {
+    fn should_store_four_mails() -> io::Result<()> {
         reinit_storage_dir()?;
         let file_path = "tests/data/100_mails.mbox";
         let mut file_reader_ref = File::open(file_path)?;
