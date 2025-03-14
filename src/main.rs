@@ -84,15 +84,15 @@ mod tests {
         Ok(())
     }
 
-    // #[test]
-    // fn split_by_size_test() -> io::Result<()> {
-    //     let file_path = "tests/data/100_mails.mbox";
-    //     let mut file_reader_ref = File::open(file_path)?;
-    //     let mails: Vec<String> = split_file(&mut file_reader_ref, 80000);
-    //     assert_eq!(mails.len(), 2);
-    //     Ok(())
-    // }
-    //
+    #[test]
+    fn split_by_size_test() -> io::Result<()> {
+        let file_path = "tests/data/100_mails.mbox";
+        let mut file_reader_ref = File::open(file_path)?;
+        let mails: Vec<String> = split_file(&mut file_reader_ref, 30000);
+        assert_eq!(mails.len(), 4);
+        Ok(())
+    }
+
     // #[test]
     // fn store_mails_chunk() -> io::Result<()> {
     //     reinit_storage_dir()?;
