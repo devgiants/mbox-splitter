@@ -1,6 +1,5 @@
 mod domain;
 
-use std::fs;
 use std::error::Error;
 use std::fmt::{Display, Formatter};
 use std::io::{Error as IoError, ErrorKind};
@@ -28,21 +27,11 @@ impl From<ChunkError> for IoError {
 
 fn main() {}
 
-
-fn store(mails: Vec<String>) -> Result<Vec<String>, IoError> {
-    let mut mbox_paths: Vec<String> = Vec::new();
-    mails.iter().for_each(|mail| {
-        let current_path = format!("tests/store/{}.mbox", mbox_paths.len());
-        fs::write(current_path.clone(), mail).unwrap();
-        mbox_paths.push(current_path);
-    });
-    Ok(mbox_paths)
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::domain::use_cases::split_file::split_file;
+    use crate::domain::use_cases::store_mails::store;
     use std::fs::File;
     use std::{fs, io};
 
