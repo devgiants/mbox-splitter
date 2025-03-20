@@ -12,7 +12,7 @@ pub fn split_file(mut data_reader: FileReader, chunk_size: u64) -> Result<Vec<St
 
     loop {
         let mut buffer = String::from("");
-        data_reader.reader.seek(SeekFrom::Start(offset)).unwrap();
+        data_reader.seek(offset);
         let bytes_read = data_reader.reader
             .by_ref()
             .take(chunk_size)
