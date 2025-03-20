@@ -1,3 +1,5 @@
+use crate::domain::model::data_reader::DataReader;
+use std::fmt::{Debug, Formatter};
 use std::fs::File;
 use std::io::{BufReader, Read, Seek, SeekFrom};
 
@@ -6,17 +8,25 @@ pub struct FileReader {
 }
 
 impl FileReader {
-    pub fn new(file_path: &str) -> Self {
-        Self {
+    pub fn new(file_path: &str) -> Box<Self> {
+        Box::new(Self {
             reader: BufReader::new(File::open(file_path).unwrap()),
-        }
+        })
     }
+}
 
-    pub fn seek(&mut self, offset: u64) {
+impl Debug for FileReader {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        todo!()
+    }
+}
+
+impl DataReader for FileReader {
+    fn seek(&mut self, offset: u64) {
         self.reader.seek(SeekFrom::Start(offset)).unwrap();
     }
 
-    pub fn read(&mut self, length: u64, mut buffer: &mut String) -> usize {
+    fn read(&mut self, length: u64, mut buffer: &mut String) -> usize {
         let bytes_read = self
             .reader
             .by_ref()

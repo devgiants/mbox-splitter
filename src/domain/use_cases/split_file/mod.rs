@@ -1,10 +1,11 @@
-use crate::adapters::secondary::data_readers::file::FileReader;
+// use crate::adapters::secondary::data_readers::file::FileReader;
+use crate::domain::model::data_reader::DataReader;
 use crate::ChunkError;
 use std::io::{Read, Seek};
 
 const MBOX_MAIL_SEPARATOR: &str = "\nFrom ";
 
-pub fn split_file(mut data_reader: FileReader, chunk_size: u64) -> Result<Vec<String>, ChunkError> {
+pub fn split_file(mut data_reader: Box<dyn DataReader>, chunk_size: u64) -> Result<Vec<String>, ChunkError> {
     let mut mails: Vec<String> = Vec::new();
     let mut offset = 0;
 
