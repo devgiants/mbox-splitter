@@ -1,4 +1,5 @@
 mod domain;
+mod adapters;
 
 use std::error::Error;
 use std::fmt::{Display, Formatter};
@@ -32,15 +33,17 @@ mod tests {
     use super::*;
     use crate::domain::use_cases::split_file::split_file;
     use crate::domain::use_cases::store_mails::store;
+    use crate::adapters::secondary::data_readers::file::FileReader;
     use std::fs::File;
     use std::{fs, io};
 
     const TEST_STORAGE_DIR: &str = "tests/store";
     #[test]
     fn should_produce_no_mail() -> io::Result<()> {
+        
         let file_path = "tests/data/empty.mbox";
-        let mut file_reader_ref = File::open(file_path)?;
-        let mails: Vec<String> = split_file(&mut file_reader_ref, 80000)?;
+        let data_reader = FileReader::new(file_path);
+        let mails: Vec<String> = split_file(data_reader, 80000)?;
         assert_eq!(mails.len(), 0);
         Ok(())
     }
@@ -48,8 +51,8 @@ mod tests {
     #[test]
     fn should_produce_one_mail() -> io::Result<()> {
         let file_path = "tests/data/one_mail.mbox";
-        let mut file_reader_ref = File::open(file_path)?;
-        let mails: Vec<String> = split_file(&mut file_reader_ref, 100000)?;
+        let data_reader = FileReader::new(file_path);
+        let mails: Vec<String> = split_file(data_reader, 100000)?;
         assert_eq!(mails.len(), 1);
         Ok(())
     }
@@ -57,8 +60,8 @@ mod tests {
     #[test]
     fn should_rise_error_regarding_chunk_size() -> io::Result<()> {
         let file_path = "tests/data/one_mail.mbox";
-        let mut file_reader_ref = File::open(file_path)?;
-        let mails = split_file(&mut file_reader_ref, 100);
+        let data_reader = FileReader::new(file_path);
+        let mails = split_file(data_reader, 100);
         assert_eq!(mails.is_err(), true);
         Ok(())
     }
@@ -66,8 +69,8 @@ mod tests {
     #[test]
     fn should_produce_two_mails() -> io::Result<()> {
         let file_path = "tests/data/two_mails.mbox";
-        let mut file_reader_ref = File::open(file_path)?;
-        let mails: Vec<String> = split_file(&mut file_reader_ref, 1200)?;
+        let data_reader = FileReader::new(file_path);
+        let mails: Vec<String> = split_file(data_reader, 1200)?;
         assert_eq!(mails.len(), 2);
         Ok(())
     }
@@ -75,8 +78,8 @@ mod tests {
     #[test]
     fn should_produce_four_mails() -> io::Result<()> {
         let file_path = "tests/data/100_mails.mbox";
-        let mut file_reader_ref = File::open(file_path)?;
-        let mails: Vec<String> = split_file(&mut file_reader_ref, 30000)?;
+        let data_reader = FileReader::new(file_path);
+        let mails: Vec<String> = split_file(data_reader, 30000)?;
         assert_eq!(mails.len(), 4);
         Ok(())
     }
@@ -85,8 +88,8 @@ mod tests {
     fn should_store_four_mails() -> io::Result<()> {
         reinit_storage_dir()?;
         let file_path = "tests/data/100_mails.mbox";
-        let mut file_reader_ref = File::open(file_path)?;
-        let mails: Vec<String> = split_file(&mut file_reader_ref, 30000)?;
+        let data_reader = FileReader::new(file_path);
+        let mails: Vec<String> = split_file(data_reader, 30000)?;
         store(mails)?;
         for i in 0..=3 {
             assert_eq!(
