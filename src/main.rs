@@ -99,6 +99,17 @@ mod tests {
         Ok(())
     }
 
+    #[test]
+    fn should_rise_error_on_storage_destination() -> io::Result<()> {
+        reinit_storage_dir()?;
+        let file_path = "tests/data/100_mails.mbox";
+        let data_reader = FileReader::new(file_path);
+        let mails: Vec<String> = split_file(data_reader, 30000)?;
+        let storage_return = store(mails, "/");
+        assert_eq!(storage_return.is_err(), true);
+        Ok(())
+    }
+
     fn reinit_storage_dir() -> Result<(), IoError> {
         fs::remove_dir_all("tests/store")?;
         fs::create_dir("tests/store")?;
