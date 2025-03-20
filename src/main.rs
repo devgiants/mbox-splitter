@@ -34,7 +34,6 @@ mod tests {
     use crate::domain::use_cases::split_file::split_file;
     use crate::domain::use_cases::store_mails::store;
     use crate::adapters::secondary::data_readers::file::FileReader;
-    use std::fs::File;
     use std::{fs, io};
 
     const TEST_STORAGE_DIR: &str = "tests/store";

@@ -1,18 +1,17 @@
-// use crate::adapters::secondary::data_readers::file::FileReader;
 use crate::domain::model::data_reader::DataReader;
 use crate::ChunkError;
-use std::io::{Read, Seek};
+use std::io::Error;
 
 const MBOX_MAIL_SEPARATOR: &str = "\nFrom ";
 
-pub fn split_file(mut data_reader: Box<dyn DataReader>, chunk_size: u64) -> Result<Vec<String>, ChunkError> {
+pub fn split_file(mut data_reader: Box<dyn DataReader>, chunk_size: u64) -> Result<Vec<String>, Error> {
     let mut mails: Vec<String> = Vec::new();
     let mut offset = 0;
 
     loop {
         let mut buffer = String::from("");
-        data_reader.seek(offset);
-        let bytes_read = data_reader.read(chunk_size, &mut buffer);
+        data_reader.seek(offset)?;
+        let bytes_read = data_reader.read(chunk_size, &mut buffer)?;
 
         if bytes_read == 0 {
             break;
@@ -25,7 +24,7 @@ pub fn split_file(mut data_reader: Box<dyn DataReader>, chunk_size: u64) -> Resu
             mails.push(buffer[0..last_separator_position].to_string());
             offset += last_separator_position as u64;
         } else {
-            return Err(ChunkError::SizeTooSmall);
+            return Err(Error::from(ChunkError::SizeTooSmall));
         }
     }
 
