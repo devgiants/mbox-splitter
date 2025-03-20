@@ -90,7 +90,7 @@ mod tests {
         let file_path = "tests/data/100_mails.mbox";
         let data_reader = FileReader::new(file_path);
         let mails: Vec<String> = split_file(data_reader, 30000)?;
-        store(mails)?;
+        store(mails, "tests/store")?;
         for i in 0..=3 {
             assert_eq!(
                 fs::exists(format!("{}/{}.mbox", TEST_STORAGE_DIR, i))?,
