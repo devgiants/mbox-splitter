@@ -1,5 +1,5 @@
 use crate::domain::model::data_reader::DataReader;
-use crate::ChunkError;
+use crate::domain::model::data_reader::ChunkError;
 use std::io::Error;
 
 const MBOX_MAIL_SEPARATOR: &str = "\nFrom ";

@@ -1,30 +1,7 @@
 mod domain;
 mod adapters;
 
-use std::error::Error;
-use std::fmt::{Display, Formatter};
-use std::io::{Error as IoError, ErrorKind};
-
-#[derive(Debug)]
-enum ChunkError {
-    SizeTooSmall,
-}
-
-impl Display for ChunkError {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            ChunkError::SizeTooSmall => write!(f, "Chunk size provided is too small, no separator found"),
-        }
-    }
-}
-
-impl Error for ChunkError {}
-
-impl From<ChunkError> for IoError {
-    fn from(error: ChunkError) -> Self {
-        IoError::new(ErrorKind::InvalidInput, error.to_string())
-    }
-}
+use std::io::Error;
 
 fn main() {}
 
@@ -110,7 +87,7 @@ mod tests {
         Ok(())
     }
 
-    fn reinit_storage_dir() -> Result<(), IoError> {
+    fn reinit_storage_dir() -> Result<(), Error> {
         fs::remove_dir_all("tests/store")?;
         fs::create_dir("tests/store")?;
         Ok(())
