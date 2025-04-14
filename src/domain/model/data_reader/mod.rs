@@ -1,10 +1,11 @@
 use std::fmt::{Debug, Display, Formatter};
 use std::io::{Error, ErrorKind};
+use async_trait::async_trait;
 
-
-pub trait DataReader: Debug {
-    fn seek(&mut self, offset: u64) -> Result<u64, Error>;
-    fn read(&mut self, length: u64, buffer: &mut String) -> Result<usize, Error>;
+#[async_trait]
+pub trait AsyncDataReader: Debug + Send + Sync {
+    async fn seek(&mut self, offset: u64) -> Result<u64, Error>;
+    async fn read(&mut self, length: u64, buffer: &mut String) -> Result<usize, Error>;
 }
 
 

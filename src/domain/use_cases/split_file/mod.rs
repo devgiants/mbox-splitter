@@ -1,17 +1,18 @@
-use crate::domain::model::data_reader::DataReader;
+use std::fmt::Debug;
+use crate::domain::model::data_reader::AsyncDataReader;
 use crate::domain::model::data_reader::ChunkError;
 use std::io::Error;
 
 const MBOX_MAIL_SEPARATOR: &str = "\nFrom ";
 
-pub fn split_file(mut data_reader: Box<dyn DataReader>, chunk_size: u64) -> Result<Vec<String>, Error> {
+pub async fn split_file(mut data_reader: Box<dyn AsyncDataReader + Send + Sync>, chunk_size: u64) -> Result<Vec<String>, Error> {
     let mut mails: Vec<String> = Vec::new();
     let mut offset = 0;
 
     loop {
         let mut buffer = String::from("");
-        data_reader.seek(offset)?;
-        let bytes_read = data_reader.read(chunk_size, &mut buffer)?;
+        data_reader.seek(offset).await?;
+        let bytes_read = data_reader.read(chunk_size, &mut buffer).await?;
 
         if bytes_read == 0 {
             break;

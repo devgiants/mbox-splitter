@@ -14,58 +14,59 @@ mod tests {
     use std::{fs, io};
 
     const TEST_STORAGE_DIR: &str = "tests/store";
-    #[test]
-    fn should_produce_no_mail() -> io::Result<()> {
+    
+    #[tokio::test]
+    async fn should_produce_no_mail() -> io::Result<()> {
         
         let file_path = "tests/data/empty.mbox";
         let data_reader = FileReader::new(file_path);
-        let mails: Vec<String> = split_file(data_reader, 80000)?;
+        let mails: Vec<String> = split_file(data_reader, 80000).await?;
         assert_eq!(mails.len(), 0);
         Ok(())
     }
 
-    #[test]
-    fn should_produce_one_mail() -> io::Result<()> {
+    #[tokio::test]
+    async fn should_produce_one_mail() -> io::Result<()> {
         let file_path = "tests/data/one_mail.mbox";
         let data_reader = FileReader::new(file_path);
-        let mails: Vec<String> = split_file(data_reader, 100000)?;
+        let mails: Vec<String> = split_file(data_reader, 100000).await?;
         assert_eq!(mails.len(), 1);
         Ok(())
     }
-
-    #[test]
-    fn should_rise_error_regarding_chunk_size() -> io::Result<()> {
+    
+    #[tokio::test]
+    async fn should_rise_error_regarding_chunk_size() -> io::Result<()> {
         let file_path = "tests/data/one_mail.mbox";
         let data_reader = FileReader::new(file_path);
-        let mails = split_file(data_reader, 100);
+        let mails = split_file(data_reader, 100).await;
         assert_eq!(mails.is_err(), true);
         Ok(())
     }
-
-    #[test]
-    fn should_produce_two_mails() -> io::Result<()> {
+    
+    #[tokio::test]
+    async fn should_produce_two_mails() -> io::Result<()> {
         let file_path = "tests/data/two_mails.mbox";
         let data_reader = FileReader::new(file_path);
-        let mails: Vec<String> = split_file(data_reader, 1200)?;
+        let mails: Vec<String> = split_file(data_reader, 1200).await?;
         assert_eq!(mails.len(), 2);
         Ok(())
     }
-
-    #[test]
-    fn should_produce_four_mails() -> io::Result<()> {
+    
+    #[tokio::test]
+    async fn should_produce_four_mails() -> io::Result<()> {
         let file_path = "tests/data/100_mails.mbox";
         let data_reader = FileReader::new(file_path);
-        let mails: Vec<String> = split_file(data_reader, 30000)?;
+        let mails: Vec<String> = split_file(data_reader, 30000).await?;
         assert_eq!(mails.len(), 4);
         Ok(())
     }
-
-    #[test]
-    fn should_store_four_mails() -> io::Result<()> {
+    
+    #[tokio::test]
+    async fn should_store_four_mails() -> io::Result<()> {
         reinit_storage_dir()?;
         let file_path = "tests/data/100_mails.mbox";
         let data_reader = FileReader::new(file_path);
-        let mails: Vec<String> = split_file(data_reader, 30000)?;
+        let mails: Vec<String> = split_file(data_reader, 30000).await?;
         store(mails, "tests/store")?;
         for i in 0..=3 {
             assert_eq!(
@@ -75,13 +76,13 @@ mod tests {
         }
         Ok(())
     }
-
-    #[test]
-    fn should_rise_error_on_storage_destination() -> io::Result<()> {
+    
+    #[tokio::test]
+    async fn should_rise_error_on_storage_destination() -> io::Result<()> {
         reinit_storage_dir()?;
         let file_path = "tests/data/100_mails.mbox";
         let data_reader = FileReader::new(file_path);
-        let mails: Vec<String> = split_file(data_reader, 30000)?;
+        let mails: Vec<String> = split_file(data_reader, 30000).await?;
         let storage_return = store(mails, "/");
         assert_eq!(storage_return.is_err(), true);
         Ok(())

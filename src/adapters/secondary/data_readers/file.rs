@@ -1,7 +1,8 @@
-use crate::domain::model::data_reader::DataReader;
+use crate::domain::model::data_reader::AsyncDataReader;
 use std::fmt::{Debug, Formatter};
 use std::fs::File;
 use std::io::{BufReader, Error, Read, Seek, SeekFrom};
+use async_trait::async_trait;
 
 pub struct FileReader {
     reader: BufReader<File>,
@@ -21,12 +22,13 @@ impl Debug for FileReader {
     }
 }
 
-impl DataReader for FileReader {
-    fn seek(&mut self, offset: u64) -> Result<u64, Error> {
+#[async_trait]
+impl AsyncDataReader for FileReader {
+    async fn seek(&mut self, offset: u64) -> Result<u64, Error> {
         self.reader.seek(SeekFrom::Start(offset))
     }
 
-    fn read(&mut self, length: u64, mut buffer: &mut String) -> Result<usize, Error> {
+    async fn read(&mut self, length: u64, mut buffer: &mut String) -> Result<usize, Error> {
         let bytes_read = self
             .reader
             .by_ref()
