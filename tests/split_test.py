@@ -3,7 +3,7 @@
 from domain.use_case.split import Split
 
 
-def test_empty_data_should_return_empty_string():
-    """Split empty data should return empty string"""
+def test_empty_file_should_return_empty_string():
+    """Split empty file should return empty string"""
     splitter = Split()
-    assert splitter.split("") == ""
+    assert splitter.split("tests/data/empty.mbox") == ""
