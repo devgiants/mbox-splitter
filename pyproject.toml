@@ -1,0 +1,31 @@
+[project]
+name = "boilerplate"
+version = "0.1.0"
+description = "This concentrates all needed packages for starting project"
+authors = [{name = "overflaw",email = "nicolas@devgiants.fr"}]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = "^3.13"
+dependencies = []
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.5"
+pytest-cov = "^6.1.1"
+pytest-watch = "^4.2.0"
+mutmut = "^3.3.0"
+pytest-xdist = "^3.7.0"
+mypy = "^1.15.0"
+flake8 = "^7.2.0"
+black = "^25.1.0"
+isort = "^6.0.1"
+pre-commit = "^4.2.0"
+pylint = "^3.3.7"
+pyinstrument = "^5.0.2"
+scalene = "^1.5.51"
+perflint = "^0.8.1"
+
